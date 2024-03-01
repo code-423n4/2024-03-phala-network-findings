@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "John_The_Ripper",
+  "risk": "2",
+  "title": "CVE-2021-21299 - possible smuggling attack",
+  "issueId": 2,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/2"
+}

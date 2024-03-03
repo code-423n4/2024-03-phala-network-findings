@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "John_The_Ripper",
+  "risk": "2",
+  "title": "vulnerabilities RUSTSEC-2024-0003, RUSTSEC-2021-0054 and RUSTSEC-2024-0006",
+  "issueId": 6,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/6"
+}

@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Daniel526",
+  "risk": "2",
+  "title": "Lack of Input Validation in ExternalDB's get Method",
+  "issueId": 9,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/9"
+}

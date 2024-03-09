@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Cryptor",
+  "risk": "2",
+  "title": "fn cluster_id is not transparent enough to use for substrate blockchain",
+  "issueId": 10,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/10"
+}

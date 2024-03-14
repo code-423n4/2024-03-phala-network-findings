@@ -28,6 +28,6 @@ is_it_in_transaction.
 
 
 
-[L05]
+[L05] Functions that are not supported in transaction mode should revert not send empty arrays
 
 

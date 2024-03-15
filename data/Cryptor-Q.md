@@ -34,3 +34,8 @@ is_it_in_transaction.
 [L06] Estimating mode returning coarse gas can make it not determinstic 
 
 
+[L07] Ensure_System should be called on every function
+
+
+
+

@@ -34,7 +34,10 @@ is_it_in_transaction.
 [L06] Estimating mode returning coarse gas can make it not determinstic 
 
 
-[L07] Ensure_System should be called on every function
+[L07] Ensure_System should be called on every function for 
+
+
+[L08] Gas price limited as u128 could cause interoperability issues with evm blockchains 
 
 
 

@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Cryptor",
+  "risk": "2",
+  "title": "Bad Actor can forcibly have cache data removed ",
+  "issueId": 21,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/21"
+}

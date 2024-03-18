@@ -42,3 +42,16 @@ is_it_in_transaction.
 
 
 
+[L09] Same imple name used can be confusing 
+
+
+[L10] No deadline for sign function 
+
+
+[L11] Determinism should not be enforced in query mode 
+
+
+
+
+
+

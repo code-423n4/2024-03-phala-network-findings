@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "0xbrett8571",
+  "risk": "2",
+  "title": "Potential misuse or improper handling of cryptographic keys, lack of proper key rotation and management mechanisms, and insecure implementation of cryptographic primitives.",
+  "issueId": 32,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/32"
+}

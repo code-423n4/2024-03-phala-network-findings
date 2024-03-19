@@ -75,3 +75,22 @@ fn check_metadata_with_path(path: &str) -> Result<(), String> {
     Ok(())
 }
 ```
+## L-03 Use of panic! should be avoided
+
+The [panic!](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ocall_impl.rs#L15) macro is used to stop execution when a condition is not met. This is useful for testing and prototyping, but should be avoided in production code.
+
+```solidity
+unsafe extern "C" fn _default_ocall(
+    _call_id: u32,
+    _data: *const u8,
+    _len: usize,
+    _ctx: *mut ::core::ffi::c_void,
+    _output: output_fn_t,
+) {
+    panic!("No ocall function provided");
+}
+```
+
+- Recommendation 
+
+Using `Result` as return type for functions that can fail is the idiomatic way to handle errors in Rust. The Result type is an enum that can be either `Ok` or `Err`. The Err variant can contain an error message. The ? operator can be used to propagate the error message to the caller.

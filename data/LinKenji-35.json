@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "LinKenji",
+  "risk": "2",
+  "title": "Input data directly passed to functions, risking injection attacks, exploiting contract vulnerabilities.",
+  "issueId": 35,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/35"
+}

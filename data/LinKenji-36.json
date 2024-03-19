@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "LinKenji",
+  "risk": "2",
+  "title": "Unprotected communication channels between Pink Runtime and host risk data compromise.",
+  "issueId": 36,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/36"
+}

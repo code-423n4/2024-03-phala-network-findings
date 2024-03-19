@@ -1,5 +1,10 @@
-[L01] set_expire has no access control 
-A bad actor can maliciously force data to be expired earlier than it should 
+[L01] system code does not check bytecode. This can be dangerous as the system contract can be upgraded 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L145-L151
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L299
+
+
 
 
 
@@ -43,6 +48,8 @@ is_it_in_transaction.
 
 
 [L09] Same imple name used can be confusing 
+
+
 
 
 [L10] No deadline for sign function 

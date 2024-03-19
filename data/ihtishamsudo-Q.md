@@ -94,3 +94,5 @@ unsafe extern "C" fn _default_ocall(
 - Recommendation 
 
 Using `Result` as return type for functions that can fail is the idiomatic way to handle errors in Rust. The Result type is an enum that can be either `Ok` or `Err`. The Err variant can contain an error message. The ? operator can be used to propagate the error message to the caller.
+
+- [Reference](https://github.com/CoinFabrik/web3-grant/tree/main/vulnerabilities/examples/panic-error)

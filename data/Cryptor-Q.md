@@ -2,7 +2,7 @@
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L299
 
-Current implementation holds little value as a bad actor can still upload malicious system code 
+Current implementation holds little value as a bad actor can still upload malicious system code since the check is made before any new code is added, posing significant risk to users 
 
 
 
@@ -45,13 +45,21 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 It is recommended to use blake128Concat for better security and a lower chance of a collision
 
 
-[L07] Ensure_System should be called on every function for 
+[L07] Ensure_System should be called for sign and verify
+
+If the system contract is maliciously upgraded, then calling sign or verify can lead to unexpected results for users 
 
 
 [L08] Gas price limited as u128 could cause interoperability issues with evm blockchains 
 
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/contract.rs#L201
+
+
+
 
 [L09] Same imple name used can be confusing 
+
+
 
 
 [L10] Not checking the bytecode for system contract can be dangerous as it can be upgraded 
@@ -62,6 +70,21 @@ The function ensure system doesn't check for correct bytecode, only the correct 
 
 
 
+[L11] No deadline for signature function 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L174-L181
+
+It is a common security to add a deadline for signatures to prevent stale transactions or prevent them from maliciously executed by workers
+
+
+[L12] is_in_transaction return value can be deceiving 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L439-L441
+
+If a user is in estimating mode, then is_in_transaction will return true since estimating mode is treated the same as transaction, when 
+it is false. There should be a function to return whether the call is in estimating mode
+
+[L13]
 
 
 

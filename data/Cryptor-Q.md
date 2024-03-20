@@ -1,5 +1,8 @@
-[L01] set_expire has no access control 
-A bad actor can maliciously force data to be expired earlier than it should 
+[L01] Ensure_System should be checked after uploading bare code 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L299
+
+Current implementation holds little value as a bad actor can still upload malicious system code 
 
 
 
@@ -30,6 +33,12 @@ is_it_in_transaction.
 
 [L05] Functions that are not supported in transaction mode should revert not send empty arrays
 
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L436
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L473
+
+
+
 
 [L06] Estimating mode returning coarse gas can make it not determinstic 
 
@@ -43,7 +52,16 @@ is_it_in_transaction.
 [L09] Same imple name used can be confusing 
 
 
-[L10] 
+[L10] Not checking the bytecode for system contract can be dangerous as it can be upgraded 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L145-L151
+
+The function ensure system doesn't check for correct bytecode, only the correct address. This can be dangerous as the contract can be maliciously upgraded
+
+
+
+
+
 
 
 

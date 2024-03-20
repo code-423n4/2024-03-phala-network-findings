@@ -38,9 +38,11 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L473
 
 
+[L06] Twox64Concat has a higher risk of a hash collision than blake128Concat 
 
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/pallet_pink.rs#L83
 
-[L06] Estimating mode returning coarse gas can make it not determinstic 
+It is recommended to use blake128Concat for better security and a lower chance of a collision
 
 
 [L07] Ensure_System should be called on every function for 

@@ -47,6 +47,12 @@ It is recommended to use blake128Concat for better security and a lower chance o
 
 [L07] Ensure_System should be called for sign and verify
 
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L174-L181
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L183-L191
+
+
+
 If the system contract is maliciously upgraded, then calling sign or verify can lead to unexpected results for users 
 
 
@@ -77,14 +83,20 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 It is a common security to add a deadline for signatures to prevent stale transactions or prevent them from maliciously executed by workers
 
 
-[L12] is_in_transaction return value can be deceiving 
+[L12] is_in_transaction return value can be misleading 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L439-L441
 
-If a user is in estimating mode, then is_in_transaction will return true since estimating mode is treated the same as transaction, when 
-it is false. There should be a function to return whether the call is in estimating mode
+If a call is in estimating mode, then is_in_transaction will return true since estimating mode is treated the same as transaction, when in reality,
+it should be false. There should be a function to return whether the call is in estimating mode instead
 
-[L13]
+
+[L13] MAX_CODE_LEN should equal the schedule 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime.rs#L114-L133
+
+
+It makes little sense that the MAX_CODE_LEN (equal to 2 *1024 *1024) is not equal to the schedule payload_len (the max size for storage value equal to 1024 *1024). This means that a code size is free to be bigger than schedule max size but it won't be deployed. 
 
 
 

@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "DadeKuma",
+  "risk": "2",
+  "title": "An attacker can bloat the Pink runtime storage with zero costs",
+  "issueId": 49,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/49"
+}

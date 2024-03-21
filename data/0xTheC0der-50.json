@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "0xTheC0der",
+  "risk": "2",
+  "title": "Limited availability of `balance_of(...)` method",
+  "issueId": 50,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/50"
+}

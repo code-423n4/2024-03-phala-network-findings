@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "XDZIBECX",
+  "risk": "2",
+  "title": "Unchecked Resource Consumption issue in Storage of Wasm Code",
+  "issueId": 96,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/96"
+}

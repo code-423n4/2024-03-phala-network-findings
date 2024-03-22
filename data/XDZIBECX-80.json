@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "XDZIBECX",
+  "risk": "3",
+  "title": "Incorrect Key Handling in commit_transaction Leads to Data Integrity Issues",
+  "issueId": 80,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/80"
+}

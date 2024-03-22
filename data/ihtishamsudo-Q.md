@@ -96,3 +96,97 @@ unsafe extern "C" fn _default_ocall(
 Using `Result` as return type for functions that can fail is the idiomatic way to handle errors in Rust. The Result type is an enum that can be either `Ok` or `Err`. The Err variant can contain an error message. The ? operator can be used to propagate the error message to the caller.
 
 - [Reference](https://github.com/CoinFabrik/web3-grant/tree/main/vulnerabilities/examples/panic-error)
+
+## L-04 Unsafe Usage of `expect` 
+
+usage of [expect](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/chain-extension/src/lib.rs#L51) method when creating the Tokio runtime. If the creation of the runtime fails, it will panic with a provided error message, causing the program to crash. This behavior is undesirable, especially in production environments or critical systems.
+
+```solidity
+fn block_on<F: core::future::Future>(f: F) -> F::Output {
+    match tokio::runtime::Handle::try_current() {
+        Ok(handle) => handle.block_on(f),
+        Err(_) => tokio::runtime::Runtime::new()
+@>          .expect("Failed to create tokio runtime")
+            .block_on(f),
+    }
+}
+```
+
+- Recommendation
+
+it's recommended to handle the error case more gracefully, rather than panicking. Instead of using expect, a safer method for error handling should be employed, such as returning a `default value` or propagating the error to the caller for appropriate handling.
+
+try to mitigate all the instances in codebase where expect is used.
+
+## L-05 Use Custom Error Handling Instead of `unwrap`
+
+The function [with_global_cache](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/chain-extension/src/local_cache.rs#L24) employs the [unwrap](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/chain-extension/src/local_cache.rs#L35) method when accessing the mutex lock in non-test mode. Using unwrap can result in a panic if the mutex is poisoned, leading to unexpected program termination.
+
+```solidity 
+fn with_global_cache<T>(f: impl FnOnce(&mut LocalCache) -> T) -> T {
+    if TEST_MODE.load(Ordering::Relaxed) {
+        // Unittests are running in multi-threaded env. Let's give per test case a cache instance.
+        use std::cell::RefCell;
+        thread_local! {
+            pub static GLOBAL_CACHE: RefCell<LocalCache> = RefCell::new(LocalCache::new());
+        }
+        GLOBAL_CACHE.with(move |cache| f(&mut cache.borrow_mut()))
+    } else {
+        use std::sync::Mutex;
+        pub static GLOBAL_CACHE: Mutex<LocalCache> = Mutex::new(LocalCache::new());
+@>      f(&mut GLOBAL_CACHE.lock().unwrap())
+    }
+}
+```
+- Recommendation
+
+it is advised to handle potential errors by using `custom error` handling instead of unwrap
+
+## L-05 Type Mismatch in `ecall_impl.rs`
+
+The code in [ecall_impl.rs](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L46) contains a type mismatch vulnerability, specifically an error of type E0308 in Rust, due to inconsistent types between the expected return type and the actual return value.
+indicates that there is a mismatch between the expected return type, which is an enum `std::result::Result`, and the actual return value, which is a tuple `(_, _, _)`
+
+- Recommendation 
+
+it is recommended to modify the pattern matching to correctly match the expected return type.
+
+Try wrapping the pattern in `Ok`
+
+`let Ok((rv, _effects, _)) = self.execute_with(&context, f);`
+
+[Another Instance](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/storage/mod.rs#L84)
+
+
+
+## Info-01 The format! macro should not be used 
+
+The problem arises from the use of the format! macro. This is used to format a string with the given arguments. Returning a custom error is desirable.
+
+```solidity
+let mut response = match result {
+        Ok(response) => response,
+        Err(err) => {
+            // If there is somthing wrong with the network, we can not inspect the reason too
+            // much here. Let it return a non-standard 523 here.
+            return Ok(HttpResponse {
+                status_code: 523,
+                reason_phrase: "Unreachable".into(),
+@>              body: format!("{err:?}").into_bytes(),
+                headers: vec![],
+            });
+        }
+    };
+```
+Consider mitgating all the instances in the codebase where the format! macro is used.
+- Recommendation
+
+It is recommended to use the `custom error` handling instead of the format! macro. This will allow the caller to handle the error in a more appropriate way.
+
+## Info-02 Use latest version of ink!
+
+Latest version of `ink!` is `5.0.0` and [project](https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/pink/Cargo.toml#L10) is using version `4.2` 
+
+- Recommendation
+
+Consider Upgrading ink! version to latest 

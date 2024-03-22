@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "Lack of upper limit of timeout for batch HTTP request could be utilized to DoS the worker",
+  "issueId": 67,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/67"
+}

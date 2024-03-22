@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "Recursive HTTP requests is possible which can be used to DoS a particular worker",
+  "issueId": 66,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/66"
+}

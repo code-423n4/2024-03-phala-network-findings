@@ -137,6 +137,10 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 The protocol tracks the free balance and the total balance of an account but does not track the reserved balance. Total balance in the substrate frame pallet is equal to free balance + reserved balance 
 
 
+[L16] Payer can be any account 
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L297
+
+
 
 
 

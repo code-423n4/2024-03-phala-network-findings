@@ -23,6 +23,8 @@ Flaws of functions we covered in the Runtime Component Analysis section is avail
 
 Before we delve in, it is crucial to understand what a runtime is in the substrate term. A runtime has all the business logic for executing transactions, transitioning & saving state as well as interacting with other nodes. In essence, it's like the EVM but for executing transactions in another network being Phala. To understand substrate and what the Phala Network is doing, we had to spend some time building a runtime from scratch ourselves because that is how we can truly understand substrate's working under the hood. We spent 7 days looking into the protocol in total with 2-3 hours allocated each day.
 
+We focused mainly in the runtime's initialization, runtime configurations, runtime calls, smart contract instantiation and execution and finally storage within the pink runtime. With the limited time we had to look into this codebase, we spent the most of our time covering the above mentioned logic of the runtime.
+
 **D1-2:**
 
 - Getting context on Phala from the provided docs: [Docs](https://docs.phala.network/)
@@ -445,6 +447,213 @@ Execution:
 - Inside the closure, the `Contracts::bare_instantiate` function is called to perform the actual contract instantiation. It uses the various parameters, including the origin, transfer amount, gas limit, storage deposit limit, code (specified by the code hash), input data, salt, debug information, and event collection strategy.
 - The result of the contract instantiation is logged using the `log` crate.
 - If the execution mode indicates that coarse-grained gas accounting should be used, the `coarse_grained` function is called to adjust the result before returning it. Otherwise, the result is returned as is - which is a `ContractInstantiateResult` that contains information about the result of the contract instantiation.
+
+```rs
+pub fn bare_call(
+    address: AccountId,
+    input_data: Vec<u8>,
+    mode: ExecutionMode,
+    tx_args: TransactionArguments,
+) -> ContractExecResult {
+```
+
+The `bare_call()` function above takes charge for executing a contract call without deploying a new contract instance. It takes the target contract address to execute, input data for the call, execution mode, and transaction arguments as input parameters. Here's a further breakdown of its call trace:
+
+- First, extract relevant transaction arguments like the transaction `origin`, `transfer`, `gas_limit`, `gas_free`, and `storage_deposit_limit` from the provided `tx_args`.
+- Convert the provided `gas_limit` into a Weight instance and set the proof size to `u64::MAX`.
+- Then, figure out the level of determinism required based on the execution mode (mode). If deterministic execution is required, it sets `Determinism::Enforced`, otherwise `Determinism::Relaxed`.
+- Execute the contract transaction by invoking the `contract_tx`'s function, passing the origin, gas limit, gas free flag, and a closure that represents the contract call.
+- In the case that the execution is not gas-free, it handles the gas costs by paying for the gas upfront, executing the transaction function, and then refunding any unused gas to the origin account -> caller.
+- Lastly, it returns the result of the contract execution.
+
+```rs
+fn contract_tx<T>(
+    origin: AccountId,
+    gas_limit: Weight,
+    gas_free: bool,
+    tx_fn: impl FnOnce() -> ContractResult<T>,
+) -> ContractResult<T> {
+```
+
+The `contract_tx` function on the other hand, is an internal helper function used to handle the execution of contract transactions. It takes the origin account, gas limit, gas-free flag, and a closure representing the transaction function. Here's a further breakdown of its call trace:
+
+- In the case the transaction is not gas-free, attempt to pay for the gas upfront using the `PalletPink::pay_for_gas` function.
+- Execute the provided transaction function (`tx_fn`).
+- If the transaction is not gas-free, calculate the gas consumed and refund any unused gas to the origin account using the `PalletPink::refund_gas` function.
+- Return the result of the transaction, including gas consumption, storage deposits, debug messages, and events.
+
+In essence, we can see that the `bare_call()` function uses the `contract_tx` internal function for executing it's logic during a smart contract call as we can see in the code snippet below:
+
+```rs
+let result = contract_tx(origin.clone(), gas_limit, gas_free, move || {
+    Contracts::bare_call(
+```
+
+### 8. Storage
+
+```rs
+impl<Backend> Storage<Backend> {
+    pub fn new(backend: Backend) -> Self {
+        Self { backend }
+    }
+}
+```
+
+The above code snippet implements a constructor for the runtime `Storage` struct. It allows for easy instantiation of the `Storage` struct backend storage for the pink runtime.
+
+```rs
+impl<Backend> Storage<Backend>
+where
+    Backend: StorageBackend<Hashing> + AsTrieBackend<Hashing>,
+{
+    pub fn execute_with<R>(
+        &self,
+        exec_context: &ExecContext,
+        f: impl FnOnce() -> R,
+    ) -> (R, ExecSideEffects, OverlayedChanges<Hashing>) {
+```
+
+- Inside the above implementation, the backend storage is retrieved using `as_trie_backend`.
+- An `OverlayedChanges` struct is created to track changes made to storage.
+- The transaction is started using `overlay.start_transaction()`.
+- An `Ext` struct is created with the overlay changes, backend, and no trie root.
+- The closure `f` is executed within the context of the externalities using `sp_externalities::set_and_run_with_externalities`.
+
+Hence, within the closure execution:
+- The timestamp and block number are set based on the provided execution context.
+- System events are reset.
+- Then closure `f` is executed, and its result is obtained.
+- System events and execution effects are then retrieved using `crate::runtime::get_side_effects`.
+- System events are emitted using `maybe_emit_system_event_block`.
+- After the closure execution, the transaction is committed using `overlay.commit_transaction()`
+
+
+```rs
+pub fn execute_mut<R>(
+        &mut self,
+        context: &ExecContext,
+        f: impl FnOnce() -> R,
+    ) -> (R, ExecSideEffects) {
+        let (rv, effects, overlay) = self.execute_with(context, f);
+        self.commit_changes(overlay);
+        (rv, effects)
+    }
+```
+`execute_mut` function:
+This function is similar to `execute_with` but commits the storage changes to the backend. It takes two parameters:
+- `context`: A reference to an `ExecContext` object, providing the execution context.
+- `f`: A closure that takes no arguments and returns a value of type `R` -> Result.
+- It returns a tuple containing the return value of the closure `f` and the execution side effects.
+- Inside the method, `execute_with` is called to execute the closure and obtain the result, effects, and overlay changes.
+- The overlay changes are then committed to the backend using `commit_changes`.
+
+```rs
+pub fn changes_transaction(
+        &self,
+        changes: OverlayedChanges<Hashing>,
+    ) -> (Hash, BackendTransaction<Hashing>) {
+        let delta = changes
+            .changes()
+            .map(|(k, v)| (&k[..], v.value().map(|v| &v[..])));
+        let child_delta = changes.children().map(|(changes, info)| {
+            (
+                info,
+                changes.map(|(k, v)| (&k[..], v.value().map(|v| &v[..]))),
+            )
+        });
+
+        self.backend
+            .full_storage_root(delta, child_delta, sp_core::storage::StateVersion::V0)
+    }
+```
+
+- This function converts overlay changes into a backend transaction.
+- It then takes the overlay changes as a parameter.
+- Returns a tuple containing the root hash and the backend transaction.
+- Inside the method, it maps the overlay changes into a format suitable for the backend transaction.
+- Finally, it calls the backend's `full_storage_root` method to obtain the root hash and transaction.
+
+```rs
+pub fn commit_changes(&mut self, changes: OverlayedChanges<Hashing>) {
+        let (root, transaction) = self.changes_transaction(changes);
+        self.backend.commit_transaction(root, transaction)
+    }
+```
+
+- This function commits the storage changes to the backend.
+- First, it takes the overlay changes as a parameter.
+- Then, inside the method, it calls `changes_transaction` to obtain the root hash and transaction.
+- Lastly, it calls the backend's `commit_transaction` method to commit the changes.
+
+```rs
+pub fn get(&self, key: &[u8]) -> Option<Vec<u8>> {
+    self.backend
+        .as_trie_backend()
+        .storage(key)
+        .expect("Failed to get storage key")
+}
+```
+
+- The above function retrieves the storage value of a specified key.
+- Then, it takes a key slice as a parameter.
+- Afterwards, it returns an `Option<Vec<u8>>`, representing the stored value associated with the `key`, if it is present.
+- Inside the function, it delegates the storage retrieval operation to the backend's storage method. If successful, it returns the storage value; otherwise, it returns None.
+
+```rs
+pub fn maybe_emit_system_event_block(events: SystemEvents) {
+    use pink_capi::v1::ocall::OCalls;
+    if events.is_empty() {
+        return;
+    }
+    if !OCallImpl.exec_context().mode.is_transaction() {
+        return;
+    }
+    let body = EventsBlockBody {
+        phala_block_number: System::block_number(),
+        contract_call_nonce: OCallImpl.contract_call_nonce(),
+        entry_contract: OCallImpl.entry_contract(),
+        origin: OCallImpl.origin(),
+        events,
+    };
+    let number = PalletPink::take_next_event_block_number();
+    let header = EventsBlockHeader {
+        parent_hash: PalletPink::last_event_block_hash(),
+        number,
+        runtime_version: crate::version(),
+        body_hash: body.using_encoded(sp_core::hashing::blake2_256).into(),
+    };
+    let header_hash = sp_core::hashing::blake2_256(&header.encode()).into();
+    PalletPink::set_last_event_block_hash(header_hash);
+    let block = EventsBlock { header, body };
+    OCallImpl.emit_system_event_block(number, block.encode());
+}
+```
+
+- The above `maybe_emit_system_event_block()` function first checks if the provided events is empty. If it is, the function returns early, indicating that there are no events to emit.
+- Next, it checks if the execution mode, obtained from the `OCallImpl`, is a transaction mode. If it's not, the function returns early, as it only emits events during transactions.
+- If both conditions are met (i.e., there are non-empty events and the execution mode is a transaction), the function proceeds to create an `EventsBlockBody` instance.
+
+The `EventsBlockBody` contains such various fields:
+
+- `phala_block_number`: The block number obtained from the System pallet.
+- `contract_call_nonce`: The contract call nonce obtained from the `OCallImpl`.
+- `entry_contract`: The entry contract obtained from the `OCallImpl`.
+- `origin`: The origin of the transaction obtained from the `OCallImpl`.
+- events: The events that need to be emitted.
+
+The function then generates a new event block number by calling `PalletPink::take_next_event_block_number`.
+
+It constructs an `EventsBlockHeader` instance, containing:
+
+- `parent_hash`: The hash of the last event block obtained from `PalletPink::last_event_block_hash`.
+- `number`: The newly generated event block number.
+- `runtime_version`: The version of the runtime obtained from `crate::version()`.
+- `body_hash`: The hash of the encoded EventsBlockBody.
+
+The function sets the hash of the last event block to the hash of the current header.
+
+Finally, it constructs an `EventsBlock` instance with the header and body, and emits this block using the `OCallImpl.emit_system_event_block` function.
+
 
 ## **5. Codebase Quality**
 

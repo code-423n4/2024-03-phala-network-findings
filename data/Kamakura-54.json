@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Kamakura",
+  "risk": "3",
+  "title": "high gas_consumed will make node panic",
+  "issueId": 54,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/54"
+}

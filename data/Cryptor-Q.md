@@ -129,6 +129,17 @@ It makes little sense that the MAX_CODE_LEN (equal to 2 *1024 *1024) is not equa
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/pallet_pink.rs#L134-L146
 
 
+[L15] Omission of reserved balance 
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L175-L181
+
+
+The protocol tracks the free balance and the total balance of an account but does not track the reserved balance. Total balance in the substrate frame pallet is equal to free balance + reserved balance 
+
+
+
+
+
 
 
 

@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "stonejiajia",
+  "risk": "3",
+  "title": "ECDSA verify funciton allow 0x00 signatures as a parameter, which makes it possible to construct a two zeros bypass ECDSA signature check.",
+  "issueId": 74,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/74"
+}

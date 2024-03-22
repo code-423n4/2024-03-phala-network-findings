@@ -2,7 +2,7 @@
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L299
 
-Current implementation holds little value as a bad actor can still upload malicious system code since the check is made before any new code is added, posing significant risk to users 
+Current implementation holds little value as a bad actor can still upload malicious system code since the ensure system check check is made before any new code is added, posing significant risk to users. 
 
 
 
@@ -10,7 +10,7 @@ Current implementation holds little value as a bad actor can still upload malici
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L299-L300
 
-Since the len in batchhttprequest is not restricted to being > 1, a user can just use batchhttperequest over the regular httprequest as the former is less likely to revert due to the timeout bound being longer 
+Since the len in batchhttprequest is not restricted to being > 1, a user can just use batchhttperequest over the regular httprequest as the former is less likely to revert due to the timeout bound being longer.
 
 
 
@@ -58,9 +58,12 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 If the system contract is maliciously upgraded, then calling sign or verify can lead to unexpected results for users 
 
 
-[L08] Gas price limited as u128 could cause interoperability issues with evm blockchains 
+[L08] fn setup cannot be called in estimating mode 
 
-https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/contract.rs#L201
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L63-L115
+
+The function setup can only be called in execution mode and not in estimating mode 
+
 
 
 
@@ -120,6 +123,10 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 
 It makes little sense that the MAX_CODE_LEN (equal to 2 *1024 *1024) is not equal to the schedule payload_len (the max size for storage value equal to 1024 *1024). This means that a code size is free to be bigger than schedule max size but it won't be deployed. 
 
+
+[L14] No code size limit check in function put_sidevm_code
+
+https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/pallet_pink.rs#L134-L146
 
 
 

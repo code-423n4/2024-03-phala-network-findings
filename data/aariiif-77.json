@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "aariiif",
+  "risk": "2",
+  "title": "Improper validation of function pointers risks system compromise, enabling unauthorized actions and data access.",
+  "issueId": 77,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/77"
+}

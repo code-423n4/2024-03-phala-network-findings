@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "aariiif",
+  "risk": "2",
+  "title": " Unchecked unwrap may lead to runtime errors, data loss, and storage corruption.",
+  "issueId": 85,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/85"
+}

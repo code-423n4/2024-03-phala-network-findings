@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Kamakura",
+  "risk": "3",
+  "title": "Attacker can take over the blockchain node server running in cloud by http_request",
+  "issueId": 56,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/56"
+}

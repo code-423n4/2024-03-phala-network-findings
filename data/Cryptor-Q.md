@@ -58,7 +58,7 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 If the system contract is maliciously upgraded, then calling sign or verify can lead to unexpected results for users 
 
 
-[L08] fn setup cannot be called in estimating mode 
+## [L08] fn setup cannot be called in estimating mode 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L63-L115
 
@@ -68,7 +68,7 @@ The function setup can only be called in execution mode and not in estimating mo
 
 
 
-[L09] Masking deposit calculation can lead to unexpected results in certain circumstances 
+## [L09] Masking deposit calculation can lead to unexpected results in certain circumstances 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/contract.rs#L122-L135
 
@@ -93,7 +93,7 @@ Here the invariant will be broken if deposit_per_byte is = 664613997892457936451
 
 
 
-[L10] Not checking the bytecode for system contract can be dangerous as it can be upgraded 
+## [L10] Not checking the bytecode for system contract can be dangerous as it can be upgraded 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L145-L151
 
@@ -101,14 +101,14 @@ The function ensure system doesn't check for correct bytecode, only the correct 
 
 
 
-[L11] No deadline for signature function 
+## [L11] No deadline for signature function 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L174-L181
 
 It is a common security to add a deadline for signatures to prevent stale transactions or prevent them from maliciously executed by workers
 
 
-[L12] is_in_transaction return value can be misleading 
+## [L12] is_in_transaction return value can be misleading 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L439-L441
 
@@ -116,7 +116,7 @@ If a call is in estimating mode, then is_in_transaction will return true since e
 it should be false. There should be a function to return whether the call is in estimating mode instead
 
 
-[L13] MAX_CODE_LEN should equal the schedule 
+## [L13] MAX_CODE_LEN should equal the schedule 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime.rs#L114-L133
 
@@ -124,12 +124,12 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 It makes little sense that the MAX_CODE_LEN (equal to 2 *1024 *1024) is not equal to the schedule payload_len (the max size for storage value equal to 1024 *1024). This means that a code size is free to be bigger than schedule max size but it won't be deployed. 
 
 
-[L14] No code size limit check in function put_sidevm_code
+## [L14] No code size limit check in function put_sidevm_code
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/pallet_pink.rs#L134-L146
 
 
-[L15] Omission of reserved balance 
+## [L15] Omission of reserved balance 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L175-L181
 
@@ -137,7 +137,7 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 The protocol tracks the free balance and the total balance of an account but does not track the reserved balance. Total balance in the substrate frame pallet is equal to free balance + reserved balance 
 
 
-[L16] Payer can be any account 
+## [L16] Payer can be any account 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L297
 
 

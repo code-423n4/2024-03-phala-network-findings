@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "Two vulnerabilities (at least) in reqwest crate open the door for malicious actor to bring all the workers down",
+  "issueId": 65,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/65"
+}

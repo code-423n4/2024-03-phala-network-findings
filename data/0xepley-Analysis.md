@@ -4,6 +4,7 @@
 ## Conceptual overview of the project:
 The Phat Contract Runtime project is an innovative framework designed for the Phala Network, aiming to extend the capabilities of decentralized applications (dApps) by providing robust off-chain computation resources. At its core, it seeks to address the inherent limitations and high costs associated with on-chain computations, which often bottleneck blockchain technologies' scalability and practical utility. By moving complex or resource-intensive processes off-chain, while still ensuring the trustlessness and security blockchain technology is known for, Phat Contracts represent a significant step forward in decentralized computing.
 
+
 The project introduces a seamless integration between on-chain smart contracts and off-chain computing tasks. Initially, users or dApps interact with smart contracts on the blockchain, which are inherently limited in their computational capabilities and suffer from high transaction fees. This is where the Phat Contract steps in; it acts as a bridge to off-chain computation, allowing for more complex, intensive operations without overburdening the blockchain or incurring prohibitive costs.
 
 One of the most unique features of this framework is its ability to perform off-chain tasks while maintaining a trustless environment. This is achieved through a distributed network of off-chain workers operating within Trusted Execution Environments (TEEs), ensuring the integrity and confidentiality of the computation process. Users can, for example, initiate a task on-chain by calling a smart contract, which then delegates the task to off-chain workers. These workers perform the necessary computations and return the results to the blockchain, ensuring that the final output is verifiable and tamper-proof.
@@ -281,6 +282,8 @@ Auditing the Phat Contract provided several new insights and learnings that are 
 
 
 NOTE: I don't track time while auditing or writing report, so what the time I specified is just a number
+
+
 
 
 

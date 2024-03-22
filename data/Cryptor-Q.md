@@ -26,7 +26,7 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L439
 
 
-the function is_running_in_command is missing or misnamed in the code to be 
+the function is_running_in_command (from the documentation) is missing or misnamed in the code to be 
 is_it_in_transaction.
 
 
@@ -63,7 +63,10 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 
 
 
-[L09] Same imple name used can be confusing 
+[L09] Masking gas calculation can lead to unexpected results in certain circumstances 
+
+
+
 
 
 

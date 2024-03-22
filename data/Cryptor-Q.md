@@ -1,4 +1,4 @@
-[L01] Ensure_System should be checked after uploading bare code 
+## [L01] Ensure_System should be checked after uploading bare code 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L299
 
@@ -6,7 +6,7 @@ Current implementation holds little value as a bad actor can still upload malici
 
 
 
-[L02] No point in using regular http request over batchhttperequest 
+## [L02] No point in using regular http request over batchhttperequest 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/capi/ecall_impl.rs#L299-L300
 
@@ -14,14 +14,14 @@ Since the len in batchhttprequest is not restricted to being > 1, a user can jus
 
 
 
-[L03] CallinCommand is misleading and should be renamed callinTransaction for clarity 
+## [L03] CallinCommand is misleading and should be renamed callinTransaction for clarity 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L336
 
 
 
 
-[L04] is_running_in_command function is missing or misnamed in the code 
+## [L04] is_running_in_command function is missing or misnamed in the code 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L439
 
@@ -31,7 +31,7 @@ is_it_in_transaction.
 
 
 
-[L05] Functions that are not supported in transaction mode should revert not send empty arrays
+## [L05] Functions that are not supported in transaction mode should revert not send empty arrays
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L436
 
@@ -40,14 +40,14 @@ https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17dea
 Sending empty arrays could be misleading to users. It is recommended to revert and send a error that these functions are not support in transaction mode
 
 
-[L06] Twox64Concat has a higher risk of a hash collision than blake128Concat 
+## [L06] Twox64Concat has a higher risk of a hash collision than blake128Concat 
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/pallet_pink.rs#L83
 
 It is recommended to use blake128Concat hash for better security and a lower chance of a collision
 
 
-[L07] Ensure_System should be called for sign and verify
+## [L07] Ensure_System should be called for sign and verify
 
 https://github.com/code-423n4/2024-03-phala-network/blob/a01ffbe992560d8d0f17deadfb9b9a2bed38377e/phala-blockchain/crates/pink/runtime/src/runtime/extension.rs#L174-L181
 

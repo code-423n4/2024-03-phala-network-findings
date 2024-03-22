@@ -164,7 +164,7 @@ fn sanitize_args(mut args: TransactionArguments, mode: ExecutionMode) -> Transac
 }
 ```
 
-- The `sanitize()` function adjusts the gas limit based on the execution mode (Transaction, Estimating, or Query).
+- The `sanitize_args()` function adjusts the gas limit based on the execution mode (Transaction, Estimating, or Query).
 - It calculates the gas limit based on a constant `GAS_PER_SECOND`, which represents the gas consumed per second.
 - For transactions and estimation, it sets the gas limit to half a second's worth of gas. For queries, it sets the gas limit to 10 seconds' worth of gas.
 - The calculated gas limit is then clipped to ensure it does not exceed the maximum allowed gas limit specified in the transaction arguments.
@@ -720,6 +720,8 @@ This section of the analysis report covers error handling, slight flaws and majo
 - Configurations are done for various pallets used in the Pink Runtime, including custom pallets `(pallet_pink)` and standard `FRAME` pallets `(pallet_balances, frame_system, pallet_insecure_randomness_collective_flip)`.
 
 Overall, the Pink Runtime codebase review was a great one to delve into even though this is our first attempt at a Rust codebase after having studied Rust for a couple days.
+
+
 
 
 ### Time spent:

@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "ihtishamsudo",
+  "risk": "2",
+  "title": "Unbounded Operation in `local_cache::apply_quotas` Can Cause OOG ",
+  "issueId": 52,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/52"
+}

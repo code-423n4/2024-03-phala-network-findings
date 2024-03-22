@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "anemone0759",
+  "risk": "2",
+  "title": "The Storage.get method does not handle Err correctly, which may cause the node to crash.",
+  "issueId": 73,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/73"
+}

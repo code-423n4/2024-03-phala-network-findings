@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "Koolex",
+  "risk": "3",
+  "title": "HTTP requests to localhost (or local IP of network of the worker) is allowed which might lead to damage or sensitive data leak from the worker",
+  "issueId": 70,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/70"
+}

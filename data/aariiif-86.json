@@ -1,0 +1,8 @@
+{
+  "contest": 344,
+  "handle": "aariiif",
+  "risk": "2",
+  "title": "Unhandled Err variant may cause incorrect masking, leading to runtime failures.",
+  "issueId": 86,
+  "issueUrl": "https://github.com/code-423n4/2024-03-phala-network-findings/issues/86"
+}
